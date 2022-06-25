@@ -16,7 +16,7 @@ interface Http {
   headers?: Record<string, unknown>;
 }
 
-enum HtppMethod {
+enum HttpMethod {
   POST = "POST",
   GET = "GET",
   PUT = "PUT",
@@ -26,7 +26,7 @@ enum HtppMethod {
 
 export const httpPost = async (r: Http): Promise<Response> => {
   const resp = await fetch(r.url, {
-    method: HtppMethod.POST,
+    method: HttpMethod.POST,
     headers: { ...{}, ...r.headers },
     body: r.payload,
   });
@@ -35,7 +35,7 @@ export const httpPost = async (r: Http): Promise<Response> => {
 
 export const httpGet = async (r: Http): Promise<Response> => {
   const resp = await fetch(r.url, {
-    method: HtppMethod.GET,
+    method: HttpMethod.GET,
     headers: { ...{}, ...r.headers },
   });
   return resp;
@@ -43,7 +43,7 @@ export const httpGet = async (r: Http): Promise<Response> => {
 
 export const httpPut = async (r: Http): Promise<Response> => {
   const resp = await fetch(r.url, {
-    method: HtppMethod.PUT,
+    method: HttpMethod.PUT,
     headers: { ...{}, ...r.headers },
     body: r.payload,
   });
@@ -52,7 +52,7 @@ export const httpPut = async (r: Http): Promise<Response> => {
 
 export const httpDelete = async (r: Http): Promise<Response> => {
   const resp = await fetch(r.url, {
-    method: HtppMethod.DELETE,
+    method: HttpMethod.DELETE,
     headers: { ...{}, ...r.headers },
     body: r.payload,
   });
@@ -61,7 +61,7 @@ export const httpDelete = async (r: Http): Promise<Response> => {
 
 export const httpPatch = async (r: Http): Promise<Response> => {
   const resp = await fetch(r.url, {
-    method: HtppMethod.PATCH,
+    method: HttpMethod.PATCH,
     headers: { ...{}, ...r.headers },
     body: r.payload,
   });

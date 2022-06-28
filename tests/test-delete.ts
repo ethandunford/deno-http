@@ -10,6 +10,7 @@
 import {
   assertEquals,
   checkResult,
+  getFileData,
   getFormData,
   HttpBinUrls,
   httpDelete,
@@ -132,7 +133,7 @@ Deno.test("testing httpDelete with payload (form data)", async () => {
 Deno.test("testing httpDelete with payload (files)", async () => {
   const resp = await httpDelete({
     url: HttpBinUrls.Anything,
-    payload: getFormData(),
+    payload: getFileData(),
   });
 
   if (resp.ok) {

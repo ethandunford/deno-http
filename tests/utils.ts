@@ -47,8 +47,14 @@ export const parseJson = (s: string): { [key: string]: string } | null => {
   }
 };
 
-export const getFormData = () => {
+export const getFileData = (): FormData => {
   const formData = new FormData();
   formData.append("file", new Blob(["Hello, World!"]), "hello.txt");
+  return formData;
+};
+
+export const getFormData = (): FormData => {
+  const formData = new FormData();
+  formData.append("name", "Deno");
   return formData;
 };

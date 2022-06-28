@@ -10,6 +10,7 @@
 import {
   assertEquals,
   checkResult,
+  getFileData,
   getFormData,
   HttpBinUrls,
   httpPost,
@@ -138,7 +139,7 @@ Deno.test("testing httpPost with payload (form data)", async () => {
 Deno.test("testing httpPost with payload (files)", async () => {
   const resp = await httpPost({
     url: HttpBinUrls.Anything,
-    payload: getFormData(),
+    payload: getFileData(),
   });
 
   if (resp.ok) {

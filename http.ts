@@ -8,8 +8,6 @@
 // # --
 // # -- ---------------------------------------------------------------------------
 
-interface Result {}
-
 interface Http {
   url: string;
   payload?: any;
@@ -24,46 +22,71 @@ enum HttpMethod {
   PATCH = "PATCH",
 }
 
-export const httpPost = async (r: Http): Promise<Response> => {
-  const resp = await fetch(r.url, {
-    method: HttpMethod.POST,
-    headers: { ...{}, ...r.headers },
-    body: r.payload,
-  });
-  return resp;
+interface Result {
+  ok: Response | null;
+  error: string | null;
+}
+
+export const httpPost = async (r: Http): Promise<Result> => {
+  try {
+    const resp = await fetch(r.url, {
+      method: HttpMethod.POST,
+      headers: { ...{}, ...r.headers },
+      body: r.payload,
+    });
+    return { ok: resp, error: null };
+  } catch (error) {
+    return { ok: null, error: error };
+  }
 };
 
-export const httpGet = async (r: Http): Promise<Response> => {
-  const resp = await fetch(r.url, {
-    method: HttpMethod.GET,
-    headers: { ...{}, ...r.headers },
-  });
-  return resp;
+export const httpGet = async (r: Http): Promise<Result> => {
+  try {
+    const resp = await fetch(r.url, {
+      method: HttpMethod.GET,
+      headers: { ...{}, ...r.headers },
+    });
+    return { ok: resp, error: null };
+  } catch (error) {
+    return { ok: null, error: error };
+  }
 };
 
-export const httpPut = async (r: Http): Promise<Response> => {
-  const resp = await fetch(r.url, {
-    method: HttpMethod.PUT,
-    headers: { ...{}, ...r.headers },
-    body: r.payload,
-  });
-  return resp;
+export const httpPut = async (r: Http): Promise<Result> => {
+  try {
+    const resp = await fetch(r.url, {
+      method: HttpMethod.PUT,
+      headers: { ...{}, ...r.headers },
+      body: r.payload,
+    });
+    return { ok: resp, error: null };
+  } catch (error) {
+    return { ok: null, error: error };
+  }
 };
 
-export const httpDelete = async (r: Http): Promise<Response> => {
-  const resp = await fetch(r.url, {
-    method: HttpMethod.DELETE,
-    headers: { ...{}, ...r.headers },
-    body: r.payload,
-  });
-  return resp;
+export const httpDelete = async (r: Http): Promise<Result> => {
+  try {
+    const resp = await fetch(r.url, {
+      method: HttpMethod.DELETE,
+      headers: { ...{}, ...r.headers },
+      body: r.payload,
+    });
+    return { ok: resp, error: null };
+  } catch (error) {
+    return { ok: null, error: error };
+  }
 };
 
-export const httpPatch = async (r: Http): Promise<Response> => {
-  const resp = await fetch(r.url, {
-    method: HttpMethod.PATCH,
-    headers: { ...{}, ...r.headers },
-    body: r.payload,
-  });
-  return resp;
+export const httpPatch = async (r: Http): Promise<Result> => {
+  try {
+    const resp = await fetch(r.url, {
+      method: HttpMethod.PATCH,
+      headers: { ...{}, ...r.headers },
+      body: r.payload,
+    });
+    return { ok: resp, error: null };
+  } catch (error) {
+    return { ok: null, error: error };
+  }
 };

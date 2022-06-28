@@ -8,5 +8,12 @@
 // # --
 // # -- ---------------------------------------------------------------------------
 export { assertEquals } from "https://deno.land/std@0.145.0/testing/asserts.ts";
-export { checkResult, HttpBinUrls, isEmpty, parseJson } from "./utils.ts";
-export { httpGet, httpPost, httpDelete, httpPut, httpPatch } from "../http.ts";
+export {
+  checkResult,
+  getFileData,
+  getFormData,
+  HttpBinUrls,
+  isEmpty,
+  parseJson,
+} from "./utils.ts";
+export { httpDelete, httpGet, httpPatch, httpPost, httpPut } from "../http.ts";

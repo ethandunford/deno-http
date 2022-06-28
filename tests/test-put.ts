@@ -10,6 +10,8 @@
 import {
   assertEquals,
   checkResult,
+  getFileData,
+  getFormData,
   HttpBinUrls,
   httpPut,
   isEmpty,
@@ -18,28 +20,37 @@ import {
 
 Deno.test("testing httpPut", async () => {
   const resp = await httpPut({ url: HttpBinUrls.Put });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+  }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut invalid method", async () => {
   const resp = await httpPut({ url: HttpBinUrls.Get });
-  const r = parseJson(await resp.text());
-  assertEquals(isEmpty(r), true);
-  assertEquals(resp.status, 405);
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    assertEquals(isEmpty(r), true);
+    assertEquals(resp.ok.status, 405);
+  }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with args", async () => {
   const resp = await httpPut({ url: `${HttpBinUrls.Anything}?foo=bah` });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
 
-  if (r) {
-    assertEquals(typeof (r["args"]), "object");
-    if (typeof (r["args"]) === "object") {
-      assertEquals(r["args"]["foo"], "bah");
+    if (r) {
+      assertEquals(typeof (r["args"]), "object");
+      if (typeof (r["args"]) === "object") {
+        assertEquals(r["args"]["foo"], "bah");
+      }
     }
   }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with headers", async () => {
@@ -50,23 +61,29 @@ Deno.test("testing httpPut with headers", async () => {
       "test": "this is a test header",
     },
   });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
 
-  if (r) {
-    assertEquals(typeof (r["headers"]), "object");
-    if (typeof (r["headers"]) === "object") {
-      assertEquals(r["headers"]["Content-Type"], "text/html; charset=UTF-8");
-      assertEquals(r["headers"]["Test"], "this is a test header");
+    if (r) {
+      assertEquals(typeof (r["headers"]), "object");
+      if (typeof (r["headers"]) === "object") {
+        assertEquals(r["headers"]["Content-Type"], "text/html; charset=UTF-8");
+        assertEquals(r["headers"]["Test"], "this is a test header");
+      }
     }
   }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with payload (body)", async () => {
   const resp = await httpPut({ url: HttpBinUrls.Anything, payload: true });
-  const r = JSON.parse(await resp.text());
-  checkResult(r, await resp.status);
-  assertEquals(r.data === "true", true);
+  if (resp.ok) {
+    const r = JSON.parse(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+    assertEquals(r.data === "true", true);
+  }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with payload (json)", async () => {
@@ -74,42 +91,53 @@ Deno.test("testing httpPut with payload (json)", async () => {
     url: HttpBinUrls.Anything,
     payload: JSON.stringify({ "foo": "bah" }),
   });
-  const r = JSON.parse(await resp.text());
-  checkResult(r, await resp.status);
+  if (resp.ok) {
+    const r = JSON.parse(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
 
-  if (r) {
-    assertEquals(typeof (r["json"]), "object");
-    assertEquals(r["json"]["foo"], "bah");
+    if (r) {
+      assertEquals(typeof (r["json"]), "object");
+      assertEquals(r["json"]["foo"], "bah");
+    }
   }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with payload (form data)", async () => {
-  const formData = new FormData();
-  formData.append("name", "Deno");
-  const resp = await httpPut({ url: HttpBinUrls.Anything, payload: formData });
-  const r = JSON.parse(await resp.text());
-  checkResult(r, await resp.status);
-  assertEquals(isEmpty(r["form"]), false);
-  assertEquals(r["form"]["name"], "Deno");
+  const resp = await httpPut({
+    url: HttpBinUrls.Anything,
+    payload: getFormData(),
+  });
+  if (resp.ok) {
+    const r = JSON.parse(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+    assertEquals(isEmpty(r["form"]), false);
+    assertEquals(r["form"]["name"], "Deno");
 
-  if (r) {
-    assertEquals(typeof (r["form"]), "object");
+    if (r) {
+      assertEquals(typeof (r["form"]), "object");
 
-    if (r["form"]) {
-      assertEquals(r["form"]["name"], "Deno");
+      if (r["form"]) {
+        assertEquals(r["form"]["name"], "Deno");
+      }
     }
   }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpPut with payload (files)", async () => {
-  const formData = new FormData();
-  formData.append("file", new Blob(["Hello, World!"]), "hello.txt");
-  const resp = await httpPut({ url: HttpBinUrls.Anything, payload: formData });
-  const r = JSON.parse(await resp.text());
-  checkResult(r, await resp.status);
+  const resp = await httpPut({
+    url: HttpBinUrls.Anything,
+    payload: getFileData(),
+  });
+  if (resp.ok) {
+    const r = JSON.parse(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
 
-  if (r) {
-    assertEquals(isEmpty(r["files"]), false);
-    assertEquals(r["files"]["file"], "Hello, World!");
+    if (r) {
+      assertEquals(isEmpty(r["files"]), false);
+      assertEquals(r["files"]["file"], "Hello, World!");
+    }
   }
+  assertEquals(resp.error, null);
 });

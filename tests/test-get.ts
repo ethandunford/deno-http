@@ -18,28 +18,40 @@ import {
 
 Deno.test("testing httpGet", async () => {
   const resp = await httpGet({ url: HttpBinUrls.Get });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+  }
+
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpGet invalid method", async () => {
   const resp = await httpGet({ url: HttpBinUrls.Post });
-  const r = parseJson(await resp.text());
-  assertEquals(isEmpty(r), true);
-  assertEquals(resp.status, 405);
+
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    assertEquals(isEmpty(r), true);
+    assertEquals(resp.ok.status, 405);
+  }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpGet with args", async () => {
   const resp = await httpGet({ url: `${HttpBinUrls.Anything}?foo=bah` });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
 
-  if (r) {
-    assertEquals(typeof (r["args"]), "object");
-    if (typeof (r["args"]) === "object") {
-      assertEquals(r["args"]["foo"], "bah");
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+
+    if (r) {
+      assertEquals(typeof (r["args"]), "object");
+      if (typeof (r["args"]) === "object") {
+        assertEquals(r["args"]["foo"], "bah");
+      }
     }
   }
+  assertEquals(resp.error, null);
 });
 
 Deno.test("testing httpGet with headers", async () => {
@@ -50,14 +62,18 @@ Deno.test("testing httpGet with headers", async () => {
       "test": "this is a test header",
     },
   });
-  const r = parseJson(await resp.text());
-  checkResult(r, await resp.status);
 
-  if (r) {
-    assertEquals(typeof (r["headers"]), "object");
-    if (typeof (r["headers"]) === "object") {
-      assertEquals(r["headers"]["Content-Type"], "text/html; charset=UTF-8");
-      assertEquals(r["headers"]["Test"], "this is a test header");
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status);
+
+    if (r) {
+      assertEquals(typeof (r["headers"]), "object");
+      if (typeof (r["headers"]) === "object") {
+        assertEquals(r["headers"]["Content-Type"], "text/html; charset=UTF-8");
+        assertEquals(r["headers"]["Test"], "this is a test header");
+      }
     }
   }
+  assertEquals(resp.error, null);
 });

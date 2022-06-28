@@ -20,8 +20,8 @@ A wrapper around the standard request library.
 - [ ] ReadMe updates
 - [ ] Add JsDoc
 - [ ] Fix lint issues
-- [ ] Error handling
-- [ ] Result Type
+- [ x ] Error handling
+- [ x ] Result Type
 
 ## Basic Usage
 

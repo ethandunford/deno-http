@@ -7,7 +7,7 @@
 // # -- Date:    24/05/2022
 // # --
 // # -- ---------------------------------------------------------------------------
-
+import { writableStreamFromWriter } from "./mods.ts";
 interface Http {
   url: string;
   payload?: any;
@@ -36,7 +36,7 @@ export const httpPost = async (r: Http): Promise<Result> => {
     });
     return { ok: resp, error: null };
   } catch (error) {
-    return { ok: null, error: error };
+    return { ok: null, error };
   }
 };
 
@@ -48,7 +48,7 @@ export const httpGet = async (r: Http): Promise<Result> => {
     });
     return { ok: resp, error: null };
   } catch (error) {
-    return { ok: null, error: error };
+    return { ok: null, error };
   }
 };
 
@@ -61,7 +61,7 @@ export const httpPut = async (r: Http): Promise<Result> => {
     });
     return { ok: resp, error: null };
   } catch (error) {
-    return { ok: null, error: error };
+    return { ok: null, error };
   }
 };
 
@@ -74,7 +74,7 @@ export const httpDelete = async (r: Http): Promise<Result> => {
     });
     return { ok: resp, error: null };
   } catch (error) {
-    return { ok: null, error: error };
+    return { ok: null, error };
   }
 };
 
@@ -87,6 +87,6 @@ export const httpPatch = async (r: Http): Promise<Result> => {
     });
     return { ok: resp, error: null };
   } catch (error) {
-    return { ok: null, error: error };
+    return { ok: null, error };
   }
 };

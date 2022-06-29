@@ -7,6 +7,8 @@
 // # -- Date:    24/05/2022
 // # --
 // # -- ---------------------------------------------------------------------------
+import { readableStreamFromReader, writableStreamFromWriter } from "../mods.ts";
+import { expandGlob } from "https://deno.land/std@0.145.0/fs/mod.ts";
 import {
   assertEquals,
   checkResult,
@@ -16,7 +18,7 @@ import {
   httpPost,
   isEmpty,
   parseJson,
-} from "./mods.ts";
+} from "../mods.ts";
 
 Deno.test("testing httpPost", async () => {
   const resp = await httpPost({ url: HttpBinUrls.Post });
@@ -152,5 +154,40 @@ Deno.test("testing httpPost with payload (files)", async () => {
     }
   }
 
+  assertEquals(resp.error, null);
+});
+
+Deno.test("testing httpPost - sending file", async () => {
+  const file = await Deno.open("./tests/logo.svg", { read: true });
+  const readableStream = readableStreamFromReader(file);
+  const resp = await httpPost({
+    url: HttpBinUrls.Anything,
+    payload: readableStream,
+  });
+  if (resp.ok) {
+    const r = parseJson(await resp.ok.text());
+    checkResult(r, await resp.ok.status, 200);
+  }
+  assertEquals(resp.error, null);
+});
+
+Deno.test("testing httpPost- receiving file", async () => {
+  const resp = await httpPost({ url: "https://deno.land/logo.svg" });
+  if (resp.ok && resp.ok.body) {
+    const file = await Deno.open("./tests/logo-download.svg", {
+      write: true,
+      create: true,
+    });
+    const writableStream = writableStreamFromWriter(file);
+    await resp.ok.body.pipeTo(writableStream);
+
+    for await (const file of expandGlob("logo-download.svg")) {
+      if (file.name === "logo-download.svg" && file.isFile == true) {
+        assertEquals(true, true);
+      } else {
+        assertEquals(true, false);
+      }
+    }
+  }
   assertEquals(resp.error, null);
 });

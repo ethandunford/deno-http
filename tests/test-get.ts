@@ -14,7 +14,7 @@ import {
   httpGet,
   isEmpty,
   parseJson,
-} from "./mods.ts";
+} from "../mods.ts";
 
 Deno.test("testing httpGet", async () => {
   const resp = await httpGet({ url: HttpBinUrls.Get });

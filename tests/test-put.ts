@@ -16,7 +16,7 @@ import {
   httpPut,
   isEmpty,
   parseJson,
-} from "./mods.ts";
+} from "../mods.ts";
 
 Deno.test("testing httpPut", async () => {
   const resp = await httpPut({ url: HttpBinUrls.Put });

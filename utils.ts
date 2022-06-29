@@ -7,7 +7,7 @@
 // # -- Date:    24/05/2022
 // # --
 // # -- ---------------------------------------------------------------------------
-import { assertEquals } from "./mods.ts";
+import { assertEquals } from "../mods.ts";
 
 export enum HttpBinUrls {
   Anything = "https://httpbin.org/anything",

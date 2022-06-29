@@ -16,7 +16,7 @@ import {
   httpDelete,
   isEmpty,
   parseJson,
-} from "./mods.ts";
+} from "../mods.ts";
 
 Deno.test("testing httpDelete", async () => {
   const resp = await httpDelete({ url: HttpBinUrls.Delete });

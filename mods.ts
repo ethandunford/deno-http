@@ -7,7 +7,10 @@
 // # -- Date:    24/05/2022
 // # --
 // # -- ---------------------------------------------------------------------------
+export { readableStreamFromReader } from "https://deno.land/std@0.145.0/streams/mod.ts";
+export { writableStreamFromWriter } from "https://deno.land/std@0.145.0/streams/mod.ts";
 export { assertEquals } from "https://deno.land/std@0.145.0/testing/asserts.ts";
+export { httpDelete, httpGet, httpPatch, httpPost, httpPut } from "./http.ts";
 export {
   checkResult,
   getFileData,
@@ -16,4 +19,3 @@ export {
   isEmpty,
   parseJson,
 } from "./utils.ts";
-export { httpDelete, httpGet, httpPatch, httpPost, httpPut } from "../http.ts";

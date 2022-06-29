@@ -16,7 +16,7 @@ import {
   httpPatch,
   isEmpty,
   parseJson,
-} from "./mods.ts";
+} from "../mods.ts";
 
 Deno.test("testing httpPatch", async () => {
   const resp = await httpPatch({ url: HttpBinUrls.Patch });
